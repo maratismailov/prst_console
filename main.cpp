@@ -551,7 +551,6 @@ int main(int argc, char *argv[])
 		out_filename = sacs_dir + event_name + ".log";
 		err_filename = sacs_dir + event_name + ".err";
 	}
-	cout << "if0\n";
 
 	// Redirect cout and cerr (main log and error log)
 
@@ -560,13 +559,11 @@ int main(int argc, char *argv[])
 	// 	Fatal_Error("Can't open main log \"" + out_filename + "\" for writing");
 	// }
 
-	cout << "if1\n";
 	
 
 	// if ( freopen(err_filename.c_str(),"w",stderr) == NULL )
 	// 	Fatal_Error("Can't open error log \"" + err_filename + "\" for writing");
 
-	cout << "if2\n";
 	
 
 	sl_loginit(
@@ -574,19 +571,15 @@ int main(int argc, char *argv[])
 		slink_logprint, NULL,
 		slink_logprint, "ERROR "
 	);
-	cout << "sl_loginit\n";
 
 
 	Init_Log();
-	cout << "Init_Log";
 
 	// Load the user's preferences (we need the screen size now)
 
 	Load_Config();
-	cout << "Load_Config";
 
 	Load_Params();
-	cout << "Load_Params";
 
 
 	// Initialize the video and audio subsystems, and open the screen
@@ -597,19 +590,20 @@ int main(int argc, char *argv[])
 
 	Init_Net();
 
-	cout << "Init_Net";
 
 
 	// Set the initial state
 
-	LoadingBar_Start();
-	LoadingBar_SetNextPercent(100);
+	// LoadingBar_Start();
+	// LoadingBar_SetNextPercent(100);
 
-		State_Add_GUI();
+	// 	State_Add_GUI();
 
-	LoadingBar_End();
+	// LoadingBar_End();
 
 	// Main loop (process pending events, update the status, draw the screen)
+
+	cout << "main loop\n";
 
 	quit = false;
 	SetPaused( false );
