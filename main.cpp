@@ -233,6 +233,7 @@ void Print_GL_Error()
 		const char *error_s = (const char *)( gluErrorString(error) );
 		string s(error_s,strlen(error_s));
 		SmallFont().Print(s, 1,0, FONTSIZE,FONTSIZE, FONT_X_IS_MAX);
+		printf(error_s);
 	}
 }
 
@@ -633,7 +634,7 @@ int main(int argc, char *argv[])
 
 		// Display an error string should we ever hit an OpenGL error
 
-		// Print_GL_Error();
+		Print_GL_Error();
 
 		// On top of everything, show a frames-per-second counter
 
