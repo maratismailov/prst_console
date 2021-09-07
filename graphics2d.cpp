@@ -238,74 +238,74 @@ void DrawFade()
 
 *******************************************************************************/
 
-void SaveScreenShot( const string & fileprefix, enum SCR_DEST_T destination , enum PNG_COMPRESSION_T compression )
-{
-	static int screenshot_num;	// Remember the last saved screenshot number
-	string filename;
-	fstream f;
+// void SaveScreenShot( const string & fileprefix, enum SCR_DEST_T destination , enum PNG_COMPRESSION_T compression )
+// {
+// 	static int screenshot_num;	// Remember the last saved screenshot number
+// 	string filename;
+// 	fstream f;
 
-	// Filename to save to
+// 	// Filename to save to
 
-	switch ( destination )
-	{
-		case SCR_OVERWRITE:
-			filename = fileprefix + ".png";
-			break;
+// 	switch ( destination )
+// 	{
+// 		case SCR_OVERWRITE:
+// 			filename = fileprefix + ".png";
+// 			break;
 
-		case SCR_NEXT:
-			// Loop through possible screenshot filenames until one that is not saved yet is found
-			for(;;)
-			{
-				filename = fileprefix + '_' + ToString(screenshot_num + 10000).substr(1) + ".png";
-				++screenshot_num;
-				f.open(filename.c_str(),ios_base::in);
-				if (!f.is_open())
-					break;
-				f.close();
-			}
-			break;
+// 		case SCR_NEXT:
+// 			// Loop through possible screenshot filenames until one that is not saved yet is found
+// 			for(;;)
+// 			{
+// 				filename = fileprefix + '_' + ToString(screenshot_num + 10000).substr(1) + ".png";
+// 				++screenshot_num;
+// 				f.open(filename.c_str(),ios_base::in);
+// 				if (!f.is_open())
+// 					break;
+// 				f.close();
+// 			}
+// 			break;
 
-		default:
-			return;
-	}
+// 		default:
+// 			return;
+// 	}
 
-	// Allocate memory for an rgb image as big as the screen (plus one row that we'll use as buffer)
+// 	// Allocate memory for an rgb image as big as the screen (plus one row that we'll use as buffer)
 
-	byte *rgb_data = NULL;	// pointer to the rgb data
+// 	byte *rgb_data = NULL;	// pointer to the rgb data
 
-//	int row_len = (screen_w * 3 + (4-1)) / 4 * 4;	// len of a row in bytes (padding to 4-bytes, default OpenGL (UN)PACK_ALIGNMENT!)
-	int row_len = screen_w * 3;
+// //	int row_len = (screen_w * 3 + (4-1)) / 4 * 4;	// len of a row in bytes (padding to 4-bytes, default OpenGL (UN)PACK_ALIGNMENT!)
+// 	int row_len = screen_w * 3;
 
-	try			{	rgb_data = new byte[row_len * (screen_h+1)];	}
-	catch(...)  {	delete [] rgb_data; return;	}
+// 	try			{	rgb_data = new byte[row_len * (screen_h+1)];	}
+// 	catch(...)  {	delete [] rgb_data; return;	}
 
-	byte *row_buffer = rgb_data + row_len * screen_h;	// pointer to the row buffer (use last row as buffer)
+// 	byte *row_buffer = rgb_data + row_len * screen_h;	// pointer to the row buffer (use last row as buffer)
 
-	// Wait for the screen to be completely drawn, then copy its contents to the memory we just allocated
+// 	// Wait for the screen to be completely drawn, then copy its contents to the memory we just allocated
 
-	glFinish();
+// 	glFinish();
 
-	glPushClientAttrib(GL_CLIENT_PIXEL_STORE_BIT);
-		glPixelStorei(GL_PACK_ALIGNMENT, 1);	// allow odd screen width
-		glReadPixels(0,0,screen_w,screen_h,GL_RGB,GL_UNSIGNED_BYTE,rgb_data);
-	glPopClientAttrib();
+// 	glPushClientAttrib(GL_CLIENT_PIXEL_STORE_BIT);
+// 		glPixelStorei(GL_PACK_ALIGNMENT, 1);	// allow odd screen width
+// 		glReadPixels(0,0,screen_w,screen_h,GL_RGB,GL_UNSIGNED_BYTE,rgb_data);
+// 	glPopClientAttrib();
 
-	// OpenGL writes in memory starting with lines at the bottom of the screen and moving upwards.
-	// To properly save in PNG format, we need to vertically flip the rgb data to match what SDL expects
+// 	// OpenGL writes in memory starting with lines at the bottom of the screen and moving upwards.
+// 	// To properly save in PNG format, we need to vertically flip the rgb data to match what SDL expects
 
-	for (int y = 0 ; y < screen_h / 2; y ++)
-	{
-		byte *row_top		=	rgb_data + row_len * y;
-		byte *row_bottom	=	rgb_data + row_len * (screen_h-1-y);
-		memcpy(row_buffer,	row_top,   	row_len);
-		memcpy(row_top,		row_bottom,	row_len);
-		memcpy(row_bottom,	row_buffer,	row_len);
-	}
+// 	for (int y = 0 ; y < screen_h / 2; y ++)
+// 	{
+// 		byte *row_top		=	rgb_data + row_len * y;
+// 		byte *row_bottom	=	rgb_data + row_len * (screen_h-1-y);
+// 		memcpy(row_buffer,	row_top,   	row_len);
+// 		memcpy(row_top,		row_bottom,	row_len);
+// 		memcpy(row_bottom,	row_buffer,	row_len);
+// 	}
 
-	Save_PNG(filename, rgb_data, screen_w, screen_h, compression);
+// 	Save_PNG(filename, rgb_data, screen_w, screen_h, compression);
 
-	delete [] rgb_data;
-}
+// 	delete [] rgb_data;
+// }
 
 /*******************************************************************************
 
