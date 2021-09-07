@@ -551,6 +551,7 @@ int main(int argc, char *argv[])
 		out_filename = sacs_dir + event_name + ".log";
 		err_filename = sacs_dir + event_name + ".err";
 	}
+	freopen(out_filename.c_str(),"w",stdout);
 	cout << "if0\n";
 
 	// Redirect cout and cerr (main log and error log)
