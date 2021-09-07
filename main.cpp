@@ -508,7 +508,6 @@ void Init_Log()
 int main(int argc, char *argv[])
 {
 	string out_filename, err_filename;
-	cout << "beginning";
 
 	if ( argc < 2 || argc > 3 )
 	{
@@ -526,7 +525,6 @@ int main(int argc, char *argv[])
 	net_name	=	argv[1];
 
 	net_dir = PATH_DATA + net_name + "/";
-	cout << "net_dir";
 
 
 	if ( argc == 2 )
@@ -553,22 +551,27 @@ int main(int argc, char *argv[])
 		out_filename = sacs_dir + event_name + ".log";
 		err_filename = sacs_dir + event_name + ".err";
 	}
-	cout << "if";
-
 
 	// Redirect cout and cerr (main log and error log)
 
 	if ( freopen(out_filename.c_str(),"w",stdout) == NULL )
 		Fatal_Error("Can't open main log \"" + out_filename + "\" for writing");
+	cout << "if1\n";
+	
 
 	if ( freopen(err_filename.c_str(),"w",stderr) == NULL )
 		Fatal_Error("Can't open error log \"" + err_filename + "\" for writing");
+
+	cout << "if2\n";
+	
 
 	sl_loginit(
 		RoundToInt(float(param_slink_log_verbosity)),
 		slink_logprint, NULL,
 		slink_logprint, "ERROR "
 	);
+	cout << "sl_loginit\n";
+
 
 	Init_Log();
 	cout << "Init_Log";
