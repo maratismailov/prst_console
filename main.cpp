@@ -105,50 +105,50 @@ void Quit_Net()
 }
 
 // Make sure a clear screen is displayed, by clearing both the front and back buffers
-// void Clear_Screen()
-// {
-// 	glDrawBuffer(GL_FRONT_AND_BACK);
-// 	glClear(GL_COLOR_BUFFER_BIT);
-// 	glDrawBuffer(GL_BACK);
-// }
+void Clear_Screen()
+{
+	glDrawBuffer(GL_FRONT_AND_BACK);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glDrawBuffer(GL_BACK);
+}
 
-// void Init_Video_And_Audio()
-// {
-// 	// Initialize SDL and shut it down on exit
-// 	// The VC++ debugger requires SDL_INIT_NOPARACHUTE to work
-// 	if (SDL_Init( SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_TIMER | SDL_INIT_NOPARACHUTE ) < 0)
-// 		Fatal_Error(SDL_GetError());
+void Init_Video_And_Audio()
+{
+	// Initialize SDL and shut it down on exit
+	// The VC++ debugger requires SDL_INIT_NOPARACHUTE to work
+	if (SDL_Init( SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_TIMER | SDL_INIT_NOPARACHUTE ) < 0)
+		Fatal_Error(SDL_GetError());
 
-// 	atexit(Quit_Video);
+	atexit(Quit_Video);
 
-// 	// Initialize SDL_mixer and shut it down on exit (if sound on)
-// 	if (config_sound)
-// 	{
-// 		int mixflags = 0;	// bitmask of MIX_INIT_<filetype>
-// 		if ( (Mix_Init(mixflags) & mixflags) != mixflags )
-// 			cerr << "Not all requested sound formats are supported: " << string(Mix_GetError()) << endl;
+	// Initialize SDL_mixer and shut it down on exit (if sound on)
+	if (config_sound)
+	{
+		int mixflags = 0;	// bitmask of MIX_INIT_<filetype>
+		if ( (Mix_Init(mixflags) & mixflags) != mixflags )
+			cerr << "Not all requested sound formats are supported: " << string(Mix_GetError()) << endl;
 
-// 		if ( Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096) < 0 )
-// 		{
-// 			cerr << "Can't open audio streams, running without sounds. Sound Library Error: " << string(Mix_GetError()) << endl;
-// 			config_sound = 0;
-// 		}
-// 		else
-// 		{
-// 			Mix_AllocateChannels(sound_t::NUMCHANNELS);
-// 			atexit(Quit_Audio);
-// 		}
-// 	}
+		if ( Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096) < 0 )
+		{
+			cerr << "Can't open audio streams, running without sounds. Sound Library Error: " << string(Mix_GetError()) << endl;
+			config_sound = 0;
+		}
+		else
+		{
+			Mix_AllocateChannels(sound_t::NUMCHANNELS);
+			atexit(Quit_Audio);
+		}
+	}
 
 	Create_Screen(0);
 
-// 	Init_OpenGL();
-// 	SetVSync(config_vsync ? true : false);
-// 	Clear_Screen();
+	Init_OpenGL();
+	SetVSync(config_vsync ? true : false);
+	Clear_Screen();
 
-// 	// Preload media files
-// 	PreLoad_Main();
-// }
+	// Preload media files
+	PreLoad_Main();
+}
 
 void Init_Net()
 {
