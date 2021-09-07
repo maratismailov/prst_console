@@ -508,7 +508,7 @@ void Init_Log()
 int main(int argc, char *argv[])
 {
 	string out_filename, err_filename;
-	printf('beginning')
+	printf('beginning');
 
 	if ( argc < 2 || argc > 3 )
 	{
@@ -567,15 +567,15 @@ int main(int argc, char *argv[])
 	);
 
 	Init_Log();
-	printf('Init_Log')
+	printf('Init_Log');
 
 	// Load the user's preferences (we need the screen size now)
 
 	Load_Config();
-	printf('Load_Config')
+	printf('Load_Config');
 
 	Load_Params();
-	printf('Load_Params')
+	printf('Load_Params');
 
 
 	// Initialize the video and audio subsystems, and open the screen
@@ -586,7 +586,7 @@ int main(int argc, char *argv[])
 
 	Init_Net();
 
-	printf('Init_Net')
+	printf('Init_Net');
 
 
 	// Set the initial state
