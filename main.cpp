@@ -526,6 +526,8 @@ int main(int argc, char *argv[])
 	net_name	=	argv[1];
 
 	net_dir = PATH_DATA + net_name + "/";
+	cout << "net_dir";
+
 
 	if ( argc == 2 )
 	{
@@ -551,6 +553,8 @@ int main(int argc, char *argv[])
 		out_filename = sacs_dir + event_name + ".log";
 		err_filename = sacs_dir + event_name + ".err";
 	}
+	cout << "if";
+
 
 	// Redirect cout and cerr (main log and error log)
 
