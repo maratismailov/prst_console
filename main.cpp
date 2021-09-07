@@ -555,16 +555,16 @@ int main(int argc, char *argv[])
 
 	// Redirect cout and cerr (main log and error log)
 
-	if ( freopen(out_filename.c_str(),"w",stdout) == NULL ){
-		cout << "if01\n";
-		Fatal_Error("Can't open main log \"" + out_filename + "\" for writing");
-	}
+	// if ( freopen(out_filename.c_str(),"w",stdout) == NULL ){
+	// 	cout << "if01\n";
+	// 	Fatal_Error("Can't open main log \"" + out_filename + "\" for writing");
+	// }
 
 	cout << "if1\n";
 	
 
-	if ( freopen(err_filename.c_str(),"w",stderr) == NULL )
-		Fatal_Error("Can't open error log \"" + err_filename + "\" for writing");
+	// if ( freopen(err_filename.c_str(),"w",stderr) == NULL )
+	// 	Fatal_Error("Can't open error log \"" + err_filename + "\" for writing");
 
 	cout << "if2\n";
 	
