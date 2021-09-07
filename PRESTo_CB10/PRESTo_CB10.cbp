@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="PRESTo_CB10" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/PRESTo" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="../.." />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option use_console_runner="0" />
+				<Option parameters="ISNet example" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-Wno-write-strings" />
+					<Add option="-DEXTERN_MODE" />
+					<Add option='-DINLINE=&quot;&quot;' />
+					<Add option="-D_finite=isfinite" />
+					<Add directory="/usr/local/include/SDL2" />
+					<Add directory="../picker" />
+					<Add directory="../rtloc" />
+					<Add directory="../libslink" />
+					<Add directory="../muparser/include" />
+				</Compiler>
+				<Linker>
+					<Add option="-Wl,-rpath=." />
+					<Add library="SDL2" />
+					<Add library="SDL2_image" />
+					<Add library="SDL2_mixer" />
+					<Add library="SDL2_net" />
+					<Add library="GL" />
+					<Add library="GLU" />
+					<Add library="png" />
+					<Add library="slink" />
+					<Add library="muparserd" />
+					<Add directory="/usr/local/lib" />
+					<Add directory="../libslink" />
+					<Add directory="../muparser/lib" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/PRESTo" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="../.." />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Option parameters="ISNet example" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add option="-Wno-write-strings" />
+					<Add option="-DEXTERN_MODE" />
+					<Add option='-DINLINE=&quot;&quot;' />
+					<Add option="-D_finite=isfinite" />
+					<Add directory="/usr/local/include/SDL2" />
+					<Add directory="../picker" />
+					<Add directory="../rtloc" />
+					<Add directory="../libslink" />
+					<Add directory="../muparser/include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="-Wl,-rpath=." />
+					<Add library="SDL2" />
+					<Add library="SDL2_image" />
+					<Add library="SDL2_mixer" />
+					<Add library="SDL2_net" />
+					<Add library="GL" />
+					<Add library="GLU" />
+					<Add library="png" />
+					<Add library="slink" />
+					<Add library="muparser" />
+					<Add directory="/usr/local/lib" />
+					<Add directory="../libslink" />
+					<Add directory="../muparser/lib" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="../binder.cpp" />
+		<Unit filename="../broker.cpp" />
+		<Unit filename="../config.cpp" />
+		<Unit filename="../filter.cpp" />
+		<Unit filename="../geometry.cpp" />
+		<Unit filename="../glext.cpp" />
+		<Unit filename="../global.cpp" />
+		<Unit filename="../graphics2d.cpp" />
+		<Unit filename="../gui.cpp" />
+		<Unit filename="../heli.cpp" />
+		<Unit filename="../kml.cpp" />
+		<Unit filename="../loading_bar.cpp" />
+		<Unit filename="../main.cpp" />
+		<Unit filename="../map.cpp" />
+		<Unit filename="../pgx.cpp" />
+		<Unit filename="../picker/FilterPicker5.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../picker/FilterPicker5_Memory.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../picker/PickData.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../place.cpp" />
+		<Unit filename="../rtloc.cpp" />
+		<Unit filename="../rtloc/GetRms.cpp" />
+		<Unit filename="../rtloc/GridLib.cpp" />
+		<Unit filename="../rtloc/GridLib.h" />
+		<Unit filename="../rtloc/GridMemLib.h" />
+		<Unit filename="../rtloc/LocStat.cpp" />
+		<Unit filename="../rtloc/OctTreeSearch.cpp" />
+		<Unit filename="../rtloc/ReadCtrlFile.cpp" />
+		<Unit filename="../rtloc/SearchEdt.cpp" />
+		<Unit filename="../rtloc/edt.cpp" />
+		<Unit filename="../rtloc/geo.cpp" />
+		<Unit filename="../rtloc/geo.h" />
+		<Unit filename="../rtloc/geometry.h" />
+		<Unit filename="../rtloc/initLocGrid.cpp" />
+		<Unit filename="../rtloc/map_project.cpp" />
+		<Unit filename="../rtloc/map_project.h" />
+		<Unit filename="../rtloc/nrmatrix.cpp" />
+		<Unit filename="../rtloc/nrmatrix.h" />
+		<Unit filename="../rtloc/nrutil.cpp" />
+		<Unit filename="../rtloc/nrutil.h" />
+		<Unit filename="../rtloc/octtree.cpp" />
+		<Unit filename="../rtloc/octtree.h" />
+		<Unit filename="../rtloc/printlog.cpp" />
+		<Unit filename="../rtloc/printstat.cpp" />
+		<Unit filename="../rtloc/ran1.cpp" />
+		<Unit filename="../rtloc/ran1.h" />
+		<Unit filename="../rtloc/rtloclib.h" />
+		<Unit filename="../rtloc/stat_lookup.cpp" />
+		<Unit filename="../rtloc/util.cpp" />
+		<Unit filename="../rtloc/util.h" />
+		<Unit filename="../rtmag.cpp" />
+		<Unit filename="../save_png.cpp" />
+		<Unit filename="../sound.cpp" />
+		<Unit filename="../state.cpp" />
+		<Unit filename="../target.cpp" />
+		<Unit filename="../texture.cpp" />
+		<Unit filename="../version.cpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+			<envvars />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

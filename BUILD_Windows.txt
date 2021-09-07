@@ -1,0 +1,149 @@
+Instructions to build PRESTo under Windows, using Visual Studio
+===============================================================
+
+PRESTo also depends on the SDL, SDL_image, SDL_mixer and SDL_net libraries.
+Below are instructions to build them from source (repository).
+Alternatively:
+- download pre-built DLLs and place them in either PRESTo\DLL32 (Win32) or PRESTo\DLL64 (x64)
+- Place the related include files in PRESTo\src\SDL*
+
+Visual Studio:
+- Install Visual Studio e.g. Visual Studio Express for Windows Desktop, which is free (2012 or newer)
+- Add Command Prompt to Tools menu [If not present]:
+    Tools | External Tools …
+    Click [Add]
+    Title: Command Prompt
+    Command: C:\Windows\System32\cmd.exe
+    Arguments: /K "%VS110COMNTOOLS%\vsvars32.bat"
+    Initial directory: $(ItemDir)
+
+[NOTE: for projects below you can set Linker->Debugging->Generate Debugging Symbols to Yes to build .pdb files for remote debugging]
+
+SDL (tested with 2.0.0):
+- Install e.g. TortoiseHG (http://tortoisehg.bitbucket.org/) to get the source code from the Mercurial repository.
+- Clone, with Source: http://hg.libsdl.org/SDL/ and Destination: PRESTo\src directory (SDL will be automatically created there)
+- Open SDL\VisualC\SDL_VS2012EE.sln [or the most appropriate to the Visual Studio version you have installed]
+- Choose Release Win32 [or x64]
+- Build SDL2
+- If DirectX header errors are reported:
+  Install the DirectX Software Development Kit (http://www.microsoft.com/en-us/download/details.aspx?id=6812)
+- Build SDLmain
+- Choose Debug
+- Build SDLmain again
+
+SDL_image (tested with 2.0.0):
+- Clone, with Source: http://hg.libsdl.org/SDL_image/ and Destination: PRESTo\src directory (SDL_image will be automatically created there)
+- Open SDL_image\VisualC\SDL_image_VS2012.sln
+- Choose Release Win32 [or x64]
+- Build SDL2_image
+- Generate libpng.lib from supplied libpng*.dll in SDL_image\VisualC\external\lib\x86 [or x64]:
+        Tools -> Command Prompt [that you added in the VS2012 step above]
+        cd external\lib\x86 [or x64]
+        dumpbin /exports libpng*.dll > libpng_exports.txt
+        [using Cygwin] awk '{print $4}' libpng_exports.txt > libpng.def
+        Replace junk at the top of libpng.def with 2 lines:
+                LIBRARY libpng<version, eg. 16-16, same as the dll filename>
+                EXPORTS
+        lib /DEF:libpng.def /MACHINE:x86 [or x64]
+
+SDL_mixer (tested with 2.0.0):
+- Clone, with Source: http://hg.libsdl.org/SDL_mixer/ and Destination: PRESTo\src directory (SDL_mixer will be automatically created there)
+- Open SDL_mixer\VisualC\SDL_mixer_VS2012.sln
+- Choose Release Win32 [or x64]
+- Build SDL2_mixer
+  [ In case of errors, in SDL_mixer\VisualC\SDL_mixer_VS2012.vcxproj:
+      change native_midi_VS2010 and timidity_VS2010.vcxproj to 2012 ]
+
+SDL_net (tested with 2.0.0):
+- Clone, with Source: http://hg.libsdl.org/SDL_net/ and Destination: PRESTo\src directory (SDL_net will be automatically created there)
+- Open SDL_net\VisualC\SDL_net_VS2008.sln (choose OK to update projects)
+- Choose Release Win32 [or x64]
+- For SDL2_net: Properties->Configuration Properties->C/C++->General->Additional Include Directories, add: $(SolutionDir)..\..\SDL\include
+- For SDL2_net: Properties->Configuration Properties->Linker->General->Additional Library Directories, add: $(SolutionDir)..\..\SDL\VisualC\SDL\$(Platform)\Release
+- Build SDL2_net
+
+libslink (tested with 2.4):
+- Get http://www.iris.edu/pub/programs/SeedLink/libslink-2.4b.tar.gz and uncompress in PRESTo\src
+- Add __declspec( dllexport ) before each function prototype in libslink.h (e.g. before "extern" lines)
+- Open the Visual Studio solution we provide in PRESTo\src\libslink\libslink_VS2012\
+- Choose Release Win32 [or x64]
+- Build libslink
+[ To recreate the provided solution:
+  - New Project -> Win32 Project. Name: libslink, Location: PRESTo\src\libslink, Solution name: libslink_VS2012.
+    Press OK. Press Next. Application Settings -> Empty Project, DLL
+  - Add -> Existing Files *.c files to Source Files directory in Solution Explorer
+  - Right click on solution -> Properties -> Configuration Manager -> Platform drop down -> Add x64
+  - C/C++ -> Preprocessor -> Preprocessor Definitions, add in both Debug and Release: _CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE
+  - Linker -> Input -> Additional Dependencies: add ws2_32.lib  ]
+
+muParser (tested with 2.2.3):
+- Get it from http://sourceforge.net/projects/muparser/, decompress in PRESTo\src\muparser
+- Open solution in muparser\build\msvc2010 [OK to Update]
+- Change MUP_BASETYPE to float in include\muParserDef.h
+- Turn off Unicode for all configurations, in all projects:
+  Project Properties -> Configuration Properties -> General -> Character Set -> Not Set
+- Choose Release Static Win32 [or x64]
+- Build muParser
+- Choose Debug Static
+- Build muParser again [Debug Static x64 may need C/C++ -> Optimization -> Optimizations disabled]
+
+FilterPicker5 (tested with 5.0.3):
+- Nothing to do, the source code is provided together with PRESTo in PRESTo\src\picker.
+[ To recreate the provided source code:
+  - Download http://alomax.free.fr/FilterPicker/archive/picker_20130212.tgz, extract in PRESTo\src\picker
+  - Add to FilterPicker5.h:
+        #include "FilterPicker5_memory.h"
+        #include "PickData.h"
+        #include "ew_bridge.h"
+  - Add to FilterPicker5_Memory.h:
+        #include "ew_bridge.h"    ]
+
+PRESTo:
+- Open the Visual Studio solution in PRESTo\src\PRESTo_VS2012\.
+- Switch configuration (Debug/Release) and Platform (Win32/x64) as needed.
+- Build it (F7).
+- Run it on the example (F5). Note:
+  The solution is configured to search for the DLLs built above in either PRESTo\DLL32 (Win32) or PRESTo\DLL64 (x64), e.g.
+      copy src\SDL\VisualC\SDL\x64\Release\SDL2.dll               DLL64
+      copy src\SDL_image\VisualC\x64\Release\SDL2_image.dll       DLL64
+      copy src\SDL_image\VisualC\external\lib\x64\libpng*.dll     DLL64
+      copy src\SDL_image\VisualC\external\lib\x64\zlib1.dll       DLL64
+      copy src\SDL_mixer\VisualC\x64\Release\SDL2_mixer.dll       DLL64
+      copy src\SDL_net\VisualC\x64\Release\SDL2_net.dll           DLL64
+      copy src\libslink\libslink_VS2012\x64\Release\libslink.dll  DLL64
+      copy "C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\redist\x64\Microsoft.VC110.CRT\msvcp110.dll"  DLL64
+      copy "C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\redist\x64\Microsoft.VC110.CRT\msvcr110.dll"  DLL64
+- Done!
+
+==========================
+
+For reference, these are the steps to recreate the PRESTo_VS2012 solution from scratch:
+
+- New Project -> Win32 Project. Name: PRESTo, Location: PRESTo\src, Solution name: PRESTo_VS2012
+  Press Next. Application Settings -> Empty Project
+- C/C++ -> Preprocessor -> Preprocessor Definitions, add in both Debug and Release: _CRT_SECURE_NO_WARNINGS;_USE_MATH_DEFINES;EXTERN_MODE
+- Turn off Unicode for all configurations:
+  Project Properties -> Configuration Properties -> General -> Character Set -> Not Set
+- Set XP compatibility:
+  Project Properties -> Configuration Properties -> General -> Platform Toolset -> v110_xp
+- Add -> Existing Files src\*.c and src\*.cpp files to Source Files directory in Solution Explorer
+- Right click on Source Files, Add -> New Filter, and create picker and rtloc "subdirs"
+- Add src\picker\*.c files to Source Files\picker folder:
+  FilterPicker5.c, FilterPicker5_Memory.c, PickData.c
+- Add src\rtloc\*.c files to Source Files\rtloc folder:
+  edt.c, geo.c, GetRms.c, GridLib.c, initLocGrid.c, LocStat.c, map_project.c, nrmatrix.c, nrutil.c, octtree.c,
+  OctTreeSearch.c, printlog.c, printstat.c, ran1.c, ReadCtrlFile.c, SearchEdt.c, stat_lookup.c, util.c
+  i.e. not needed: cropgrid.c, GridMemLib.c, Read4dBuf.c
+- Set rtloc\* to compile as C++ (select them and right click, Advanced -> Compile As-> C++, in all configurations)
+- C/C++ -> General -> Warning Level: Level 4 [optional]
+- C/C++ -> General -> Additional Include Directories:
+  ..\..\SDL\include;..\..\SDL_image;..\..\SDL_image\VisualC\external\include;..\..\SDL_net;..\..\SDL_mixer;..\..\libslink;..\..\muparser\include;..\..\rtloc;..\..\picker
+- Linker -> General -> Additional Library Directories:
+  ..\..\SDL\VisualC\SDL\Win32\Release;..\..\SDL\VisualC\SDLmain\Win32\Debug;..\..\SDL_image\VisualC\Win32\Release;..\..\SDL_net\VisualC\Release;..\..\SDL_mixer\VisualC\Release;..\..\SDL_image\VisualC\external\lib\x86;..\..\libslink\libslink_VS2012\Release;..\..\muparser\lib
+  [use SDLmain\Win32\Debug for Debug and SDLmain\Win32\Release for Release]
+- Linker -> Input -> Additional Dependencies: 
+  %(AdditionalDependencies);opengl32.lib;glu32.lib;sdl2main.lib;sdl2.lib;sdl2_image.lib;sdl2_net.lib;sdl2_mixer.lib;libpng.lib;libslink.lib;muparserd32.lib
+- Set Linker -> System -> Enable Large Addresses (All Configurations) to Yes.
+- In the project folder add an icon (presto.ico) and a resource (PRESTo.rc: 1 ICON "presto.ico"). Add the .rc file to the project Resources.
+- Debugging -> Working Directory: $(SolutionDir)..\..
+- Debugging -> Environment: PATH=%PATH%;$(SolutionDir)..\..\DLL32 [or DLL64]

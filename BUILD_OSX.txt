@@ -1,0 +1,135 @@
+Instructions to build PRESTo under OS X using Xcode 4 / gcc
+===========================================================
+
+PRESTo also depends on the SDL, SDL_image, SDL_mixer and SDL_net libraries.
+Below we will use the bre-built SDL* Frameworks
+
+Tested on:
+
+=== OS X 10.8.5 (Mountain Lion) ===
+Darwin Users-Mac.local 12.5.0 Darwin Kernel Version 12.5.0: Sun Sep 29 13:33:47 PDT 2013; root:xnu-2050.48.12~1/RELEASE_X86_64 x86_64
+Xcode 4.6.3
+i686-apple-darwin11-llvm-gcc-4.2 (GCC) 4.2.1 (Based on Apple Inc. build 5658) (LLVM build 2336.11.00)
+==========================
+
+- Install Xcode 4.6.3 [download dmg from https://developer.apple.com/downloads/]
+
+- Install the Command Line Tools from Xcode->Preferences->Downloads
+
+- We will build with the 10.8 SDK and a deployment target of 10.6. While SDL does support 10.5,
+  building against that (with the 10.8 SDK) produces compilation errors in both muParser and rtloc:
+  explicit instantiation of ‘std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, const std::basic_string<_CharT, _Traits, _Alloc>&) [with _CharT = char, _Traits = std::char_traits<char>, _Alloc = std::allocator<char>]’ but no definition available
+
+- From a terminal:
+sudo mv /usr/bin/cc /usr/bin/cc.hide   [hide clang which is the default compiler]
+sudo mv /usr/bin/c++ /usr/bin/c++.hide [hide clang which is the default compiler]
+
+- Install the SDL Frameworks in ~/PRESTo (SDL2, SDL2_image, SDL2_mixer, SDL2_net)
+        http://www.libsdl.org/release/SDL2-2.0.1.dmg
+        http://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.0.dmg
+        http://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.0.dmg
+        http://www.libsdl.org/projects/SDL_net/release/SDL2_net-2.0.0.dmg
+
+- Due to a problem in the pre-built 2.0.0 dmg:
+mv SDL2_mixer.framework/Frameworks/smpeg2.framework SDL2_mixer.framework/Frameworks/smpeg2.framework.HIDE
+
+- libslink (tested with 2.4):
+Download http://www.iris.edu/pub/programs/SeedLink/libslink-2.4b.tar.gz
+tar xf libslink-2.4b.tar.gz
+cd libslink
+vi Makefile
+        Add -mmacosx-version-min=10.6 to this line:
+        $(CC) -dynamiclib -compatibility_version $(COMPAT_VER) -current_version $(CURRENT_VER) -install_name $(LIB_DYN_ALIAS) -o $(LIB_DYN) $(LIB_OBJS)
+CC=gcc CFLAGS="-O2 -Wall -mmacosx-version-min=10.6" make --debug=b dynamic
+[to check for the minimum supported OS X version of the resulting library: otool -l libslink.2.4.dylib | grep -A3 VERSION_MIN]
+rm libslink.a [prevent static linking]
+mv libslink.dylib ../..
+mv libslink.2.4.dylib ../..
+
+- muParser (tested with 2.2.3):
+[Get it from http://sourceforge.net/projects/muparser/]
+mv muparser_v2_2_3 muparser
+cd muparser
+[!! Change MUP_BASETYPE to float in include/muParserDef.h !!]
+./configure --enable-debug --disable-shared CFLAGS=-mmacosx-version-min=10.6 CXXFLAGS=-mmacosx-version-min=10.6 LDFLAGS=-mmacosx-version-min=10.6
+make
+mv lib/libmuparserd.a lib/xxlibmuparserd.a
+make clean
+make distclean
+./configure --disable-debug --disable-shared CFLAGS=-mmacosx-version-min=10.6 CXXFLAGS=-mmacosx-version-min=10.6 LDFLAGS=-mmacosx-version-min=10.6
+make
+mv lib/xxlibmuparserd.a lib/libmuparserd.a
+
+- libpng (tested with 1.6.8):
+Download libpng: http://sourceforge.net/projects/libpng/files/libpng16/
+tar tf ~/Downloads/libpng-1.6.8.tar
+mv libpng-1.6.8 libpng
+cd libpng
+./configure CFLAGS=-mmacosx-version-min=10.6 CXXFLAGS=-mmacosx-version-min=10.6 LDFLAGS=-mmacosx-version-min=10.6
+make check
+cp .libs/libpng16.16.dylib ../..
+cd ../..
+ln -s libpng16.16.dylib libpng.dylib
+install_name_tool -id libpng.dylib libpng16.16.dylib
+
+- Open the Xcode project (~/PRESTo/src/PRESTo_XC4), build it (Cmd-B) and run it on the example (Cmd-R).
+  Switch Debug/Release with Edit Scheme (Cmd-<).
+
+- Done!
+
+==========================
+
+For reference, these are the steps to recreate the Xcode project from scratch:
+
+Run Xcode
+New Mac OS X Application -> Cocoa Application
+Name: PRESTo_XC4 in /Users/user/PRESTo/src/PRESTo_XC4 [Create new folder]
+Rename Target to PRESTo [press return on the name]
+Target->Summary->Version: 0.2.7 [i.e. PRESTo version]
+Remove all frameworks [Cocoa etc. - remove only the references!]
+Remove all source files [main.m, MainMenu.xib, AppDelegate.h, AppDelegate.m - delete in this case]
+Create new groups src, src/picker, src/rtloc
+        Add to src: src/*.c and src/*.cpp
+        Add to src/picker: src/picker/*.c
+        Add to src/rtloc: src/rtloc/*.cpp [except cropgrid.cpp, GridMemLib.cpp, Read4dBuf.cpp]
+Project->Compiler for C/C++/Objective-C->: LLVM GCC 4.2
+Project->Build Settings->LLVM GCC 4.2 - Language->Other C Flags: -Wno-write-strings
+Target->Build Phases->Link Binary With Libraries:
+        Add OpenGL;
+        Add Others [navigate to ~/PRESTo];
+                Add SDL, SDL_image, SDL_mixer, SDL_net
+Add to User Header Search Paths:
+        ../../../SDL2.framework/Headers
+        ../../../SDL2_image.framework/Headers
+        ../../../SDL2_mixer.framework/Headers
+        ../../../SDL2_net.framework/Headers
+        ../../libslink
+        ../../muparser/include
+        ../../libpng
+Add to Library Search Paths:
+        ../../.. [main PRESTo directory for libslink and libpng]
+        ../../muparser/lib
+        ../../libpng/lib
+Project>Info->OS X Deployment Target: 10.6
+Target->Build Settings->LLVM GCC 4.2 Preprocessing->Preprocessor Macros->Debug/Release. Add:
+        EXTERN_MODE
+        INLINE=""
+        _finite=isfinite
+Target->Build Settings->LLVM GCC 4.2 Code Generation->Optimization Level->Release: Fastest [-O3]
+Target->Build Settings->Linking->Other Linker flags. Add:
+        -lpng -lmuparser -lslink [Use muparserd for Debug!]
+Target->Build Settings->Search Paths->Library Search Paths:
+        ../../muparser/lib
+Target->Linking->Runpath Search Paths: .
+Product->Scheme->Edit Scheme->Arguments. Add 2 arguments:
+        ISNet
+        example
+Product->Scheme->Edit Scheme->Options:
+        Use Custom Working Directory: $SRCROOT/../../..
+
+Package PRESTo:
+        cp /Users/user/Library/Developer/Xcode/DerivedData/PRESTo_XCode4-dzaksnorfevkrhgnnmmltunydxpl/Build/Products/Release/PRESTo ~/
+        otool -L ./PRESTo [check dependencies]
+        otool -l ./PRESTo | grep -A3 VERSION_MIN [check OS X compatibility]
+        cd ~
+        GZIP=-9 tar -c --exclude='._*' --exclude='.DS_Store' -vzf PRESTo_v0.2.7_Mac_10.6_64bits.tgz PRESTo/PRESTo PRESTo/SDL2*.framework PRESTo/config PRESTo/data PRESTo/docs PRESTo/eventpostproc PRESTo/font PRESTo/libpng* PRESTo/libslink* PRESTo/sound PRESTo/texture

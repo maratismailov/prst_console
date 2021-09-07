@@ -1,0 +1,122 @@
+Instructions to build PRESTo under Ubuntu / Debian using the Code::Blocks IDE
+=============================================================================
+
+PRESTo also depends on the SDL, SDL_image, SDL_mixer and SDL_net libraries.
+Below are instructions to build them from source (repository).
+Alternatively, install the related SDL*-dev packages.
+
+Tested on:
+
+=== Ubuntu 12.04.2 LTS ===
+Linux ubuntu 3.2.0-48-generic #74-Ubuntu SMP Thu Jun 6 19:43:26 UTC 2013 x86_64 x86_64 x86_64 GNU/Linux
+gcc (Ubuntu/Linaro 4.6.3-1ubuntu5) 4.6.3
+==========================
+
+=== Debian 7.1 ===
+Linux debian 3.2.0-4-amd64 #1 SMP Debian 3.2.46-1 x86_64 GNU/Linux
+gcc (Debian 4.7.2-5) 4.7.2
+==========================
+
+- Needed packages
+sudo apt-get install gcc make build-essential
+sudo apt-get install mercurial
+sudo apt-get install mesa-utils glmark2
+
+- SDL (tested with 2.0.0):
+sudo apt-get install debhelper dh-autoreconf dpkg-dev libasound2-dev libgl1-mesa-dev libglu1-mesa-dev libpulse-dev libts-dev libudev-dev libdbus-1-dev libx11-dev libxcursor-dev libxext-dev libxi-dev libxinerama-dev libxrandr-dev libxss-dev libxt-dev libxv-dev libxxf86vm-dev
+hg clone http://hg.libsdl.org/SDL SDL
+cd SDL
+./configure; make; sudo make install
+
+- SDL_image (tested with 2.0.0):
+sudo apt-get install libpng-dev libjpeg-dev libtiff-dev
+hg clone http://hg.libsdl.org/SDL_image SDL_image
+cd SDL_image
+./autogen.sh; ./configure; make; sudo make install
+
+- SDL_net (tested with 2.0.0):
+hg clone http://hg.libsdl.org/SDL_net SDL_net
+cd SDL_net
+./autogen.sh; ./configure; make; sudo make install
+
+- SDL_mixer (tested with 2.0.0):
+sudo apt-get install libflac-dev libfluidsynth-dev libmikmod2-dev libogg-dev libvorbis-dev
+hg clone http://hg.libsdl.org/SDL_mixer SDL_mixer
+cd SDL_mixer
+./autogen.sh; ./configure; make; sudo make install
+
+- libslink (tested with 2.4):
+wget http://www.iris.edu/pub/programs/SeedLink/libslink-2.4b.tar.gz
+tar xf libslink-2.4b.tar.gz
+cd libslink
+vi Makefile [add -fPIC to GCCFLAGS]
+make gcc shared
+
+- muParser (tested with 2.2.3):
+[Get it from http://sourceforge.net/projects/muparser/]
+unzip muparser_v2_2_3.zip
+mv muparser_v2_2_3 muparser
+cd muparser
+./configure --enable-debug --disable-shared
+make
+mv lib/libmuparserd.a lib/xxlibmuparserd.a
+make clean
+make distclean
+./configure --disable-debug --disable-shared
+make
+mv lib/xxlibmuparserd.a lib/libmuparserd.a
+
+- Copy some built libraries in the PRESTo directory:
+[from PRESTo]
+cp src/libslink/libslink.so.2.4 .; ln -s -T libslink.so.2.4 libslink.so
+
+- PRESTo:
+sudo apt-get install libglu1-mesa-dev codeblocks codeblocks-contrib
+[ Open the Code::Blocks project in PRESTO_CB10, build and run PRESTo on the example ]
+* A Makefile is also provided in the PRESTo_CB10\, auto-generated from the Code::Blocks project (via cbp2make) *
+
+- Done!
+
+==========================
+
+For reference, these are the steps to recreate the PRESTO_CB10 project from scratch:
+
+- Run Code::Blocks (tested with version 10)
+- File -> New -> Project -> Empty Project: PRESTO_CB10 (in PRESTo/src)
+- Add Files: src/*.c and src/*.cpp [but do *not* add dirent_win32.c, if present]
+- Add Files: src/picker/*.c
+- Add Files: src/rtloc/*.cpp [except cropgrid.cpp, GridMemLib.cpp, Read4dBuf.cpp]
+- Project options -> Build target: GUI application, Output Filename=bin/<???>/PRESTo, Execution Working Dir=../..
+- Build Options -> Other Options:
+        -Wno-write-strings
+- Build Options -> #defines:
+        EXTERN_MODE
+        INLINE=""
+        _finite=isfinite
+- Build Options -> Linker settings -> Link libraries:
+        SDL2
+        SDL2_image
+        SDL2_mixer
+        SDL2_net
+        GL
+        GLU
+        png
+        slink
+        muparserd [muparser for Release!]
+- Build Options -> Search directories -> Compiler:
+        /usr/local/include/SDL2
+        ../picker
+        ../rtloc
+        ../libslink
+        ../muparser/include
+- Build Options -> Search directories -> Linker:
+        /usr/local/lib
+        ../libslink
+        ../muparser/lib
+- cp PRESTo.desktop /usr:
+        [Desktop Entry]
+        Type=Application
+        Name=PRESTo Early Warning System
+        Icon=presto
+        Exec=PRESTo
+        Categories=Science
