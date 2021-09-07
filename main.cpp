@@ -597,7 +597,7 @@ int main(int argc, char *argv[])
 	// LoadingBar_Start();
 	// LoadingBar_SetNextPercent(100);
 
-	// 	State_Add_GUI();
+		State_Add_GUI();
 
 	// LoadingBar_End();
 
