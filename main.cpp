@@ -551,11 +551,15 @@ int main(int argc, char *argv[])
 		out_filename = sacs_dir + event_name + ".log";
 		err_filename = sacs_dir + event_name + ".err";
 	}
+	cout << "if0\n";
 
 	// Redirect cout and cerr (main log and error log)
 
-	if ( freopen(out_filename.c_str(),"w",stdout) == NULL )
+	if ( freopen(out_filename.c_str(),"w",stdout) == NULL ){
+		cout << "if01\n";
 		Fatal_Error("Can't open main log \"" + out_filename + "\" for writing");
+	}
+
 	cout << "if1\n";
 	
 
