@@ -85,18 +85,18 @@ void PreLoad_Main()
 }
 
 // Shut down the video subsytem
-// void Quit_Video()
-// {
-// 	Destroy_Screen();
-// 	SDL_Quit();
-// }
+void Quit_Video()
+{
+	Destroy_Screen();
+	SDL_Quit();
+}
 
 // Shut down the audio subsytem
-// void Quit_Audio()
-// {
-// 	Mix_CloseAudio();
-// 	Mix_Quit();
-// }
+void Quit_Audio()
+{
+	Mix_CloseAudio();
+	Mix_Quit();
+}
 
 // Shut down the network subsytem
 void Quit_Net()
