@@ -140,7 +140,7 @@ void Quit_Net()
 // 		}
 // 	}
 
-// 	Create_Screen(0);
+	Create_Screen(0);
 
 // 	Init_OpenGL();
 // 	SetVSync(config_vsync ? true : false);
