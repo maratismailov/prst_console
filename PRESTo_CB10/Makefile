@@ -38,7 +38,7 @@ LIB_RELEASE = $(LIB)-lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_net -lGL -lGLU -lpng
 LDFLAGS_RELEASE = $(LDFLAGS) -s -Wl,-rpath=.
 OBJDIR_RELEASE = obj/Release
 DEP_RELEASE = 
-OUT_RELEASE = bin/Release/PRESTo
+OUT_RELEASE = bin/Release/console_PRESTo
 
 OBJ_DEBUG = $(OBJDIR_DEBUG)/__/rtloc/printstat.o $(OBJDIR_DEBUG)/__/rtloc/geo.o $(OBJDIR_DEBUG)/__/rtloc/initLocGrid.o $(OBJDIR_DEBUG)/__/rtloc/map_project.o $(OBJDIR_DEBUG)/__/rtloc/nrmatrix.o $(OBJDIR_DEBUG)/__/rtloc/nrutil.o $(OBJDIR_DEBUG)/__/rtloc/octtree.o $(OBJDIR_DEBUG)/__/rtloc/printlog.o $(OBJDIR_DEBUG)/__/rtloc/edt.o $(OBJDIR_DEBUG)/__/rtloc/ran1.o $(OBJDIR_DEBUG)/__/rtloc/stat_lookup.o $(OBJDIR_DEBUG)/__/rtloc/util.o $(OBJDIR_DEBUG)/__/rtmag.o $(OBJDIR_DEBUG)/__/save_png.o $(OBJDIR_DEBUG)/__/sound.o $(OBJDIR_DEBUG)/__/state.o $(OBJDIR_DEBUG)/__/target.o $(OBJDIR_DEBUG)/__/texture.o $(OBJDIR_DEBUG)/__/version.o $(OBJDIR_DEBUG)/__/pgx.o $(OBJDIR_DEBUG)/__/broker.o $(OBJDIR_DEBUG)/__/config.o $(OBJDIR_DEBUG)/__/filter.o $(OBJDIR_DEBUG)/__/geometry.o $(OBJDIR_DEBUG)/__/glext.o $(OBJDIR_DEBUG)/__/global.o $(OBJDIR_DEBUG)/__/graphics2d.o $(OBJDIR_DEBUG)/__/gui.o $(OBJDIR_DEBUG)/__/heli.o $(OBJDIR_DEBUG)/__/kml.o $(OBJDIR_DEBUG)/__/loading_bar.o $(OBJDIR_DEBUG)/__/main.o $(OBJDIR_DEBUG)/__/map.o $(OBJDIR_DEBUG)/__/binder.o $(OBJDIR_DEBUG)/__/picker/FilterPicker5.o $(OBJDIR_DEBUG)/__/picker/FilterPicker5_Memory.o $(OBJDIR_DEBUG)/__/picker/PickData.o $(OBJDIR_DEBUG)/__/place.o $(OBJDIR_DEBUG)/__/rtloc.o $(OBJDIR_DEBUG)/__/rtloc/GetRms.o $(OBJDIR_DEBUG)/__/rtloc/GridLib.o $(OBJDIR_DEBUG)/__/rtloc/LocStat.o $(OBJDIR_DEBUG)/__/rtloc/OctTreeSearch.o $(OBJDIR_DEBUG)/__/rtloc/ReadCtrlFile.o $(OBJDIR_DEBUG)/__/rtloc/SearchEdt.o
 
