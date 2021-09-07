@@ -35,6 +35,6 @@ enum PNG_COMPRESSION_T
 	PNG_COMPRESSION_BEST
 };
 
-bool Save_PNG(const string & filename, byte *image_data, unsigned width, unsigned height, PNG_COMPRESSION_T compression);
+// bool Save_PNG(const string & filename, byte *image_data, unsigned width, unsigned height, PNG_COMPRESSION_T compression);
 
 #endif
