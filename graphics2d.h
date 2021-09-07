@@ -62,7 +62,7 @@ enum SCR_DEST_T
 	SCR_OVERWRITE,
 	SCR_NEXT
 };
-void SaveScreenShot( const string & fileprefix, enum SCR_DEST_T destination , enum PNG_COMPRESSION_T compression );
+// void SaveScreenShot( const string & fileprefix, enum SCR_DEST_T destination , enum PNG_COMPRESSION_T compression );
 
 // Fading
 void StartFadeIn (float duration = 1.6f, const color_t & color = color_t(0,0,0,0));

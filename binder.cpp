@@ -1408,7 +1408,7 @@ void binder_t :: Run(vector<station_t *> & stations)
 			// Screenshot
 
 			cout << SecsToString(SecsNow()) << ": Save Screenshot..." << endl;
-			SaveScreenShot( fileprefix, SCR_OVERWRITE, PNG_COMPRESSION_BEST );
+			// SaveScreenShot( fileprefix, SCR_OVERWRITE, PNG_COMPRESSION_BEST );
 
 			// KML
 

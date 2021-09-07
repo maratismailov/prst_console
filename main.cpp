@@ -196,10 +196,10 @@ bool Keyboard_Default(SDL_KeyboardEvent &event)
 
 	// Save a screenshot
 	case SDLK_F2:
-	case SDLK_PRINTSCREEN:
-		if (pressed)
-			SaveScreenShot( (realtime ? net_dir : sacs_dir) + "screenshot", SCR_NEXT, PNG_COMPRESSION_BEST );
-		break;
+	// case SDLK_PRINTSCREEN:
+	// 	if (pressed)
+	// 		SaveScreenShot( (realtime ? net_dir : sacs_dir) + "screenshot", SCR_NEXT, PNG_COMPRESSION_BEST );
+	// 	break;
 
 	// Pause
 	case SDLK_p:
@@ -624,12 +624,12 @@ int main(int argc, char *argv[])
 
 		// Save a screenshot at a fixed pace (if in movie mode)
 
-		if (!realtime && param_simulation_movie_period && simutime_t::Get() >= simutime_next_screenshot)
-		{
-			// Calc next screenshot time before saving (or the movie frame rate would be biased by the time it takes to save the screenshot)
-			simutime_next_screenshot = floor(simutime_t::Get()/param_simulation_movie_period) * param_simulation_movie_period + param_simulation_movie_period;
-			SaveScreenShot( sacs_dir + "movie", SCR_NEXT, PNG_COMPRESSION_NONE );
-		}
+		// if (!realtime && param_simulation_movie_period && simutime_t::Get() >= simutime_next_screenshot)
+		// {
+		// 	// Calc next screenshot time before saving (or the movie frame rate would be biased by the time it takes to save the screenshot)
+		// 	simutime_next_screenshot = floor(simutime_t::Get()/param_simulation_movie_period) * param_simulation_movie_period + param_simulation_movie_period;
+		// 	SaveScreenShot( sacs_dir + "movie", SCR_NEXT, PNG_COMPRESSION_NONE );
+		// }
 
 		// Display an error string should we ever hit an OpenGL error
 
